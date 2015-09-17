@@ -25,31 +25,32 @@ class LoginView {
 	 */
 	public function response() {
 		$message = '';
+		$response = '';
 
-		if(isset($_POST[self::$name])){
-			$nameOutput = $_POST[self::$name];
-			$passwordOutput = $_POST[self::$password];
+		if ($this->checkPost()) {
+			$usernameInput = $_POST[self::$name];
+			$passwordInput = $_POST[self::$password];
 
-			if(!empty($nameOutput)){
-				if(!empty($passwordOutput)){
-					if($this->loginModel->compareUserName($nameOutput) || $this->loginModel->comparePassword($passwordOutput)){
-						echo "inloggad!";
-					}else{
-						$message = 'Wrong username or Password';
-					}
-				} else {
-					$message = 'Empty password';
-				}
-			} else {
-				$message = 'Empty user name';
+			if($this->loginModel->checkValues($usernameInput, $passwordInput)){
+
+				$message = $this->loginModel->getMessage();
+				$response = $this->generateLogoutButtonHTML($message);
+
+			}else {
+				$message = $this->loginModel->getMessage();
+				$response = $this->generateLoginFormHTML($message);
 			}
-
+		}else{
+			$response = $this->generateLoginFormHTML($message);
 		}
 
-		$response = $this->generateLoginFormHTML($message);
 		//$response .= $this->generateLogoutButtonHTML($message);
 		return $response;
 
+	}
+
+	private function checkPost(){
+		return isset($_POST[self::$login]);
 	}
 
 	/**
@@ -71,7 +72,7 @@ class LoginView {
 	* @param $message, String output message
 	* @return  void, BUT writes to standard output!
 	*/
-	private function generateLoginFormHTML($message) {
+	private function generateLoginFormHTML($message/*, $storedName*/) {
 		return '
 			<form method="post" >
 				<fieldset>

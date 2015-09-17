@@ -19,8 +19,7 @@ $v = new LoginView($login);
 $dtv = new DateTimeView();
 $lv = new LayoutView();
 
-$loginController = new LoginControl($login, $v);
+$lc = new LoginControl($login, $v);
+$lc->doLogin();
 
-
-
-$lv->render(false, $v, $dtv);
+$lv->render($lc->isLogedin(), $v, $dtv);
