@@ -3,21 +3,44 @@
 class LoginControl {
 
     private $loginModel;
+    private $sessionModel;
     private $loginView;
-    private $isLogedIn = false;
 
-    public function __construct(Login $loginModel, LoginView $v){
+
+    public function __construct(Login $loginModel, Session $session, LoginView $v){
         $this->loginModel = $loginModel;
-        $this->liginView = $v;
+        $this->sessionModel = $session;
+        $this->loginView = $v;
     }
 
-    public function doLogin(){
-        //return $this->loginView->checkValues();
-
-    }
-
+    /**
+    *
+    * checks is user posts, sets session and message
+    * @return boolean
+    */
     public function isLogedin(){
-        return $this->isLogedIn;
-    }
 
+        if($this->loginView->checkLogoutPost()){
+            $this->sessionModel->destroySession();
+            //$this->loginModel->setMessage("Bye bye!");
+        }
+
+        if($this->sessionModel->isSessionSetTrue()){
+            return true;
+        }
+
+        if($this->loginView->checkLoginPost()){
+            $password = $this->loginView->getInputPassword();
+            $userName = $this->loginView->getInputUsername();
+
+            if($this->loginModel->checkValues($userName, $password)){
+                $this->sessionModel->setSession(true);
+                return true;
+            }else{
+                $this->sessionModel->destroySession();
+            }
+        }
+        $this->sessionModel->setSession(false);
+        return false;
+    }
 }
