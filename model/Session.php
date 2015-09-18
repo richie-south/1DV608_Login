@@ -30,7 +30,7 @@ class Session {
     * @return boolean
     */
     public function isSessionSetTrue(){
-        return isset($_SESSION[self::$val]) && $_SESSION[self::$val] == true;
+        return isset($_SESSION[self::$val]) && $_SESSION[self::$val];
     }
 
 }

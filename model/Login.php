@@ -18,6 +18,7 @@ class Login {
             $this->setMessage('Username is missing');
             return false;
         }
+        
         if(empty($password)){
             $this->setMessage('Password is missing');
             return false;
@@ -30,7 +31,6 @@ class Login {
 
         $this->setMessage('Welcome');
         return true;
-
     }
 
     /**

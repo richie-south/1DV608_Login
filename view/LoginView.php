@@ -56,12 +56,6 @@ class LoginView {
 		$message = '';
 		$response = '';
 
-		// user press logout button
-		/*if($this->checkLogoutPost()){
-			$message = $this->loginModel->getMessage();
-			$response = $this->generateLoginFormHTML($message);
-		}*/
-
 		if($this->sessionModel->isSessionSetTrue()){
 			$message = $this->loginModel->getMessage();
 			$response = $this->generateLogoutButtonHTML($message);

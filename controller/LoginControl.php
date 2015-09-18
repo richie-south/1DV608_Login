@@ -19,13 +19,12 @@ class LoginControl {
     * @return boolean
     */
     public function isLogedin(){
-
-        if($this->loginView->checkLogoutPost()){
-            $this->sessionModel->destroySession();
-            //$this->loginModel->setMessage("Bye bye!");
-        }
-
         if($this->sessionModel->isSessionSetTrue()){
+            if($this->loginView->checkLogoutPost()){
+                $this->sessionModel->destroySession();
+                $this->loginModel->setMessage("Bye bye!");
+                return false;
+            }
             return true;
         }
 
@@ -36,10 +35,10 @@ class LoginControl {
             if($this->loginModel->checkValues($userName, $password)){
                 $this->sessionModel->setSession(true);
                 return true;
-            }else{
-                $this->sessionModel->destroySession();
             }
         }
+
+        $this->sessionModel->destroySession();
         $this->sessionModel->setSession(false);
         return false;
     }
