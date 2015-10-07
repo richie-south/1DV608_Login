@@ -55,8 +55,9 @@ class RegisterView {
             $this->message = "Password has too few characters, at least 6 characters.";
         } catch (\model\PasswordDontMatchException $e) {
             $this->message = "Passwords do not match.";
-        }// TODO: invalid caracters
-        catch (Exception $e) {
+        } catch (\model\InvalidCharacters $e) {
+            $this->message = "Username contains invalid characters.";
+        } catch (Exception $e) {
             $this->message = "Unspecified error";
         }
         return null;
@@ -73,7 +74,7 @@ class RegisterView {
                 <legend>Register a new user - Write username and password</legend>
                     <p id="'. self::$MessageID .'">'.$this->message.'</p>
                     <label for="'. self::$UserName .'" >Username :</label>
-                    <input type="text" size="20" name="'. self::$UserName .'" id="'. self::$UserName .'" value="" />
+                    <input type="text" size="20" name="'. self::$UserName .'" id="'. self::$UserName .'" value="'.$this->getRequestUserName().'" />
                     <br/>
                     <label for="'. self::$Password .'" >Password  :</label>
                     <input type="password" size="20" name="'. self::$Password .'" id="'. self::$Password .'" value="" />
@@ -87,4 +88,10 @@ class RegisterView {
             </form>
         ';
     }
+
+    private function getRequestUserName() {
+		if (isset($_POST[self::$UserName])) {
+			return strip_tags($_POST[self::$UserName]);
+		}
+	}
 }

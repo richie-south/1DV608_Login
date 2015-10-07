@@ -6,6 +6,7 @@ class RegisterController {
     private $registerView;
 
     public function __construct(\model\UserDAL $userDAL, RegisterView $rv){
+
         $this->userDAL = $userDAL;
         $this->registerView = $rv;
     }

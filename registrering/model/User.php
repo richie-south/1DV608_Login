@@ -6,6 +6,7 @@ class EmptyInputException extends \Exception {};
 class NoUserNameException extends \Exception {};
 class NoPasswordException extends \Exception {};
 class PasswordDontMatchException extends \Exception {};
+class InvalidCharacters extends \Exception {};
 
 class User {
 
@@ -16,7 +17,7 @@ class User {
         //$username = strip_tags($username);
         //$password = strip_tags($password);
         // htmlspecialchars
-        var_dump(strlen($username) < 3);
+
         if(is_string($username) == false || is_string($password) == false || strlen($password) < 6 && strlen($username) < 3){
                 throw new EmptyInputException();
         }
@@ -24,6 +25,11 @@ class User {
         if (is_string($username) == false || strlen($username) < 3){
             throw new NoUserNameException();
         }
+
+        if(strip_tags($username) != $username){
+            throw new InvalidCharacters();
+        }
+
         if (is_string($password) == false || strlen($password) < 6){
             throw new NoPasswordException();
         }
@@ -32,7 +38,8 @@ class User {
         }
 
         $this->username = $username;
-        $this->password = $password;
+        $this->password = sha1(\Settings::SALT . $password); //hash($password + \Settings::SALT);
+
     }
 
     public function getPassword(){
