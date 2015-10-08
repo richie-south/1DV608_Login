@@ -1,10 +1,15 @@
 <?php
 
-
 class LayoutView {
-    private static $url = "?register";
 
-    public function render($isLoggedIn, LoginView $v, DateTimeView $dtv, RegisterView $rv) {
+    public function __construct(LoginView $v, DateTimeView $dtv, RegisterView $rv, \view\NavigationView $navView) {
+        $this->loginView = $v;
+        $this->dateTimeView = $dtv;
+        $this->registerView = $rv;
+        $this->navView = $navView;
+    }
+
+    public function render($isLoggedIn) {
         echo '<!DOCTYPE html>
           <html>
             <head>
@@ -13,13 +18,13 @@ class LayoutView {
             </head>
             <body>
               <h1>Assignment 2</h1>
-              '.$this->renderLink($rv).'
+              '.$this->renderLink().'
               ' . $this->renderIsLoggedIn($isLoggedIn) . '
 
               <div class="container">
-                  ' . $this->renderForm($v, $rv) . '
+                  ' . $this->renderForm() . '
 
-                  ' . $dtv->show() . '
+                  ' . $this->dateTimeView->show() . '
               </div>
              </body>
           </html>
@@ -35,17 +40,17 @@ class LayoutView {
         }
     }
 
-    private function renderForm(LoginView $v, RegisterView $rv){
-        if($rv->userWantsToRegistrat()){
-            return $rv->response();
+    private function renderForm(){
+        if($this->navView->userWantsToRegistrate()){
+            return $this->registerView->response();
         }
-        return $v->response();
+        return $this->loginView->response();
     }
 
-    function renderLink(RegisterView $rv){
-        if($rv->userWantsToRegistrat()){
-            return '<a href="?">Back to login</a>';
+    function renderLink(){
+        if($this->navView->userWantsToRegistrate()){
+            return $this->navView->getLinkToLogin();
         }
-        return '<a href='.self::$url.'>Register a new user</a>';
+        return $this->navView->getLinkToRegistration();
     }
 }

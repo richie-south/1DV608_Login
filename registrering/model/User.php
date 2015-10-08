@@ -38,7 +38,7 @@ class User {
         }
 
         $this->username = $username;
-        $this->password = sha1(\Settings::SALT . $password); //hash($password + \Settings::SALT);
+        $this->password = sha1(\Settings::SALT . $password);
 
     }
 

@@ -8,7 +8,11 @@ class UserDAL {
     private static $table = "lab4";
 
     public function __construct(){
-        $this->database = new \mysqli("richardsoderman.se", "root", "8uhOTD11Bf", "phplab4");
+
+    }
+
+    public function connect(){
+        $this->database = new \mysqli(\Settings::DBURL, \Settings::DBUserName, \Settings::DBPassword, \Settings::DBName);
 		if (mysqli_connect_errno()) {
 		    printf("Connect failed: %s\n", mysqli_connect_error());
 		    exit();
@@ -16,27 +20,26 @@ class UserDAL {
     }
 
     public function save(\model\User $user){
-
         if($this->doExists($user->getUsername())){
             throw new \Exception();
         }
 
-        $stmt = $this->database->prepare("INSERT INTO  `lab4` (
-			`username` , `password`) VALUES (?, ?)");
+        $stmt = $this->database->prepare("INSERT INTO  `lab4` (`username` , `password`) VALUES (?, ?)");
 
 		if ($stmt === FALSE) {
 			throw new \Exception($this->database->error);
 		}
+
 		$username = $user->getUsername();
 		$password = $user->getPassword();
+
 		$stmt->bind_param('ss', $username, $password);
 		$stmt->execute();
 
     }
 
     private function doExists($username){
-        $stmt = $this->database->prepare("SELECT EXISTS(SELECT 1 FROM lab4 WHERE username = '".$username."')");
-        //$stmt = $this->database->prepare("SELECT * FROM lab4 WHERE username = 'erik2'");
+        $stmt = $this->database->prepare("SELECT EXISTS(SELECT 1 FROM ".self::$table." WHERE username = '".$username."')");
         if ($stmt === FALSE) {
             throw new \Exception();
         }
@@ -51,26 +54,21 @@ class UserDAL {
         return false;
     }
 
-    public function getGetUsers(){
-        /*return $this->users;
+    public function correctCredentials($username, $password){
+        $password = sha1(\Settings::SALT . $password);
+        $stmt = $this->database->prepare("SELECT EXISTS(SELECT 1 FROM ".self::$table." WHERE BINARY username = '".$username."' AND password = '".$password."')");
 
-		$stmt = $this->database->prepare("SELECT * FROM " . self::$table);
-		if ($stmt === FALSE) {
-			throw new \Exception($this->database->error);
-		}
-		$stmt->execute();
+        if ($stmt === FALSE) {
+            throw new \Exception();
+        }
 
-	    $stmt->bind_result($pk, $title, $description, $price);
-	    while ($stmt->fetch()) {
-	    	$product = new Product($title, $price, $pk, $description);
-	    	$this->productCatalog->add($product);
-		}
-		return  $this->productCatalog;*/
+        $stmt->execute();
+        $stmt->bind_result($exsists);
+        $stmt->fetch();
 
-    }
-
-    public function isSame(\model\User $user){
+        if($exsists == 1){
+            return true;
+        }
         return false;
     }
-
 }

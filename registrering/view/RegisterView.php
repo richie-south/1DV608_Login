@@ -11,18 +11,11 @@ class RegisterView {
     private static $MessageID = "RegisterView::Message";
     private $message;
 
-    private static $url = "register";
 
     public function response(){
         return $this->generateRegistrateFormHTML();
     }
 
-    public function userWantsToRegistrat(){
-        if(isset($_GET[self::$url])){
-            return true;
-        }
-        return false;
-    }
 
     public function checkUserNamePost(){
         return $_POST[self::$UserName];

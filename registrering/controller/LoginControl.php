@@ -6,7 +6,6 @@ class LoginControl {
     private $sessionModel;
     private $loginView;
 
-
     public function __construct(Login $loginModel, Session $session, LoginView $v){
         $this->loginModel = $loginModel;
         $this->sessionModel = $session;
@@ -14,7 +13,6 @@ class LoginControl {
     }
 
     /**
-    *
     * checks is user posts, sets session and message
     * @return boolean
     */

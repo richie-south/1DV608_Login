@@ -1,11 +1,11 @@
 <?php
 
 class Login {
-    private static $username = 'Admin';
-    private static $password = 'Password';
     private $message = '';
+    private $userDAL;
 
-    public function __construct() {
+    public function __construct(\model\UserDAL $userDAL) {
+        $this->userDAL = $userDAL;
     }
 
     /**
@@ -18,16 +18,16 @@ class Login {
             $this->setMessage('Username is missing');
             return false;
         }
-        
+
         if(empty($password)){
             $this->setMessage('Password is missing');
             return false;
         }
-
-		if(!$this->compareUserName($userName) || !$this->comparePassword($password)){
+        
+        if(!$this->userDAL->correctCredentials($userName, $password)){
             $this->setMessage('Wrong name or password');
             return false;
-		}
+        }
 
         $this->setMessage('Welcome');
         return true;
@@ -49,22 +49,5 @@ class Login {
         return $this->message;
     }
 
-    /**
-    * checks is inputed username matches stored variable $username
-    * @param $username, String, user name
-    * @return true/false
-    */
-    private function compareUserName($username){
-        return $username == self::$username;
-    }
-
-    /**
-    * checks is inputed password matches stored variable $password
-    * @param $password, String, password
-    * @return true/false
-    */
-    private function comparePassword($password){
-        return $password == self::$password;
-    }
 
 }

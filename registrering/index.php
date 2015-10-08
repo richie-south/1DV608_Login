@@ -7,6 +7,7 @@ require_once('view/LoginView.php');
 require_once('view/DateTimeView.php');
 require_once('view/LayoutView.php');
 require_once('view/RegisterView.php');
+require_once('view/NavigationView.php');
 
 
 require_once('model/Login.php');
@@ -20,19 +21,23 @@ error_reporting(E_ALL);
 ini_set('display_errors', 'On');
 
 // CREATE OBJECTS OF THE MODEL
-$login = new Login();
-$session = new Session();
 $userDAL = new \model\UserDAL();
+$login = new Login($userDAL);
+$session = new Session();
+
+$userDAL->connect();
 
 //CREATE OBJECTS OF THE VIEWS
 $v = new LoginView($login, $session);
 $dtv = new DateTimeView();
-$lv = new LayoutView();
+
 $rv = new RegisterView();
+$navView = new \view\NavigationView();
+$lv = new LayoutView($v, $dtv, $rv, $navView);
 
 // CREATE OBJECTS OF THE CONTROLLER
-$lc = new LoginControl($login, $session, $v);
-$rc = new RegisterController($userDAL, $rv);
+$lc = new LoginControl($login, $session, $v, $userDAL);
+$rc = new RegisterController($userDAL, $rv, $session, $navView);
 
 $rc->registrations();
-$lv->render($lc->isLogedin(), $v, $dtv, $rv);
+$lv->render($lc->isLogedin());

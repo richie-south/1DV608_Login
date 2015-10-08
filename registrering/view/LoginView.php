@@ -9,6 +9,8 @@ class LoginView {
 	private static $cookiePassword = 'LoginView::CookiePassword';
 	private static $keep = 'LoginView::KeepMeLoggedIn';
 	private static $messageId = 'LoginView::Message';
+	private static $recentlyRegisterdUsername = "u";
+
 	private $loginModel;
 	private $sessionModel;
 
@@ -59,11 +61,15 @@ class LoginView {
 		if($this->sessionModel->isSessionSetTrue()){
 			$message = $this->loginModel->getMessage();
 			$response = $this->generateLogoutButtonHTML($message);
+
 		}else{
 			$message = $this->loginModel->getMessage();
+			if($this->sessionModel->isUserNameSessionSetTrue()){
+				$message = "Registered new user.";
+			}
 			$response = $this->generateLoginFormHTML($message);
 		}
-
+		$this->sessionModel->destroyUserNameSession();
 		return $response;
 	}
 
@@ -113,6 +119,12 @@ class LoginView {
 	private function getRequestUserName() {
 		if (isset($_POST[self::$name])) {
 			return $_POST[self::$name];
+		}
+
+		if($this->sessionModel->isUserNameSessionSetTrue()){
+			$name = $this->sessionModel->getUserNameSession();
+
+			return $name;
 		}
 	}
 
