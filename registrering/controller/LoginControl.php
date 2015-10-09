@@ -1,12 +1,14 @@
 <?php
 
+namespace controller;
+
 class LoginControl {
 
     private $loginModel;
     private $sessionModel;
     private $loginView;
 
-    public function __construct(Login $loginModel, Session $session, LoginView $v){
+    public function __construct(\model\Login $loginModel, \model\Session $session, \view\LoginView $v){
         $this->loginModel = $loginModel;
         $this->sessionModel = $session;
         $this->loginView = $v;

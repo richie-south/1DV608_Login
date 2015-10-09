@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 class Login {
     private $message = '';
     private $userDAL;
@@ -23,7 +25,7 @@ class Login {
             $this->setMessage('Password is missing');
             return false;
         }
-        
+
         if(!$this->userDAL->correctCredentials($userName, $password)){
             $this->setMessage('Wrong name or password');
             return false;

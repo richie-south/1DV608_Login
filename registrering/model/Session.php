@@ -1,5 +1,7 @@
 <?php
 
+namespace model;
+
 class Session {
 
     private static $val = "status";
@@ -34,7 +36,6 @@ class Session {
         return isset($_SESSION[self::$val]) && $_SESSION[self::$val];
     }
 
-/*================================*/
     /**
     * stores value in session
     * @param $val, boolean value to be stored in session

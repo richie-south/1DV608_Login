@@ -14,9 +14,6 @@ class User {
     private $password;
 
     public function __construct($username, $password, $passwordRepeet){
-        //$username = strip_tags($username);
-        //$password = strip_tags($password);
-        // htmlspecialchars
 
         if(is_string($username) == false || is_string($password) == false || strlen($password) < 6 && strlen($username) < 3){
                 throw new EmptyInputException();

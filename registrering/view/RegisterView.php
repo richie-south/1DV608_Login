@@ -1,5 +1,7 @@
 <?php
 
+namespace view;
+
 require_once("model/User.php");
 
 class RegisterView {

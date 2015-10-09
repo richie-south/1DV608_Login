@@ -1,8 +1,10 @@
 <?php
 
+namespace view;
+
 class LayoutView {
 
-    public function __construct(LoginView $v, DateTimeView $dtv, RegisterView $rv, \view\NavigationView $navView) {
+    public function __construct(\view\LoginView $v, \view\DateTimeView $dtv, \view\RegisterView $rv, \view\NavigationView $navView) {
         $this->loginView = $v;
         $this->dateTimeView = $dtv;
         $this->registerView = $rv;
