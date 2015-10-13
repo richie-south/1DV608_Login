@@ -11,14 +11,14 @@ class FileModel {
     }
 
     // move this to DAL
-    public function isSame($fileName){
+    /*public function isSame($fileName){
         foreach(glob(self::$target_dir.'*.mp3') as $file) {
             if($fileName == rtrim(trim($file, self::$target_dir), ".mp3")){
                 return true;
             }
             return false;
         }
-    }
+    }*/
 
     public function generateFileName(){
         $result = '';
