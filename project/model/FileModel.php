@@ -6,19 +6,11 @@ class FileModel {
 
     private static $target_dir = "files/";
     private static $fileEnding = "mp3";
+    private static $tmpName = "tmp_name";
+
     public function __construct(){
 
     }
-
-    // move this to DAL
-    /*public function isSame($fileName){
-        foreach(glob(self::$target_dir.'*.mp3') as $file) {
-            if($fileName == rtrim(trim($file, self::$target_dir), ".mp3")){
-                return true;
-            }
-            return false;
-        }
-    }*/
 
     public function generateFileName(){
         $result = '';
@@ -32,17 +24,16 @@ class FileModel {
         return $result.=".".self::$fileEnding;
     }
 
-    public function isUploaded(){
-        return is_uploaded_file($_FILES['mp3']['tmp_name']);
+    public function isTempUploaded(){
+        return is_uploaded_file($_FILES[self::$fileEnding][self::$tmpName]);
     }
 
-    public function getFilePath($fileName){
-        return self::$target_dir . basename($fileName);
+    public function getFileToUpload(){
+        return $_FILES[self::$fileEnding][self::$tmpName];
     }
 
-    public function moveUploadeFile($path){
-        return move_uploaded_file($_FILES['mp3']['tmp_name'], $path);
-
+    public function trimFilePath($path){
+        return rtrim(trim($path, self::$target_dir), ".mp3");
     }
 
 }

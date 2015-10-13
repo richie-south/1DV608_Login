@@ -26,16 +26,15 @@ class MasterController {
 
     public function handelInput(){
         if($this->navigationView->userWantsToViewFile()){
-            //var_dump($this->navigationView->getURLFileData());
+
 
             $showFileView = new \view\ShowFileView($this->DAL);
             $fileGet = new \controller\FileGetController($showFileView);
 
-
-            //$this->view = $showFileView->render($fileGet->getFileName());
             $fileGet->getFile($this->navigationView->getURLFileData());
             $this->view = $fileGet->getHTML();
         } else {
+
             $fileModel = new \model\FileModel();
             $uploadView = new \view\UploadView();
             $fileUpload = new \controller\FileUploadController($uploadView, $fileModel, $this->DAL);

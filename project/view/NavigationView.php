@@ -17,6 +17,5 @@ class NavigationView {
     public function getURLFileData(){
         return $_GET[self::$viewFile];
     }
-
-
+    
 }

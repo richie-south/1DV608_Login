@@ -25,7 +25,8 @@ class ShowFileView {
     }
 
     public function generateFile($name){
-        return '<p>'.$this->message.'</p>
+        return '
+            <p>'.$this->message.'</p>
             <audio controls>
                 <source src="'.$name.'" type="audio/mpeg">
                 Your browser does not support the audio element.
