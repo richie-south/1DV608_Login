@@ -6,8 +6,11 @@ class UploadView {
     private static $upload = "UploadView::submit";
     private static $maxFileSize = 900000;
     private $uploadetFileURL = '';
+    private $DAL;
+    private $message = '';
 
-    public function __construct(){
+    public function __construct(\model\DAL $dal){
+        $this->DAL = $dal;
     }
 
     public function render($isUpload){
@@ -34,6 +37,10 @@ class UploadView {
             <a href="'.$this->uploadetFileURL.'">'.$this->uploadetFileURL.'</a>';
     }
 
+    public function errorPageRender(){
+        return '<p>'.$this->message.'</p>';
+    }
+
     public function isFileUploaded(){
         return isset($_POST[self::$upload]);
     }
@@ -43,4 +50,15 @@ class UploadView {
         $this->uploadetFileURL = $actual_link;
     }
 
+    public function getFile(){
+        try {
+            return new \model\FileModel($_FILES, $this->DAL);
+        } catch (\model\WrongFileTypeException $e) {
+            $this->message = "Wrong file format";
+        } catch (\model\ToLargeFileException $e) {
+            $this->message = "To large file!";
+        }
+
+        return null;
+    }
 }

@@ -12,7 +12,6 @@ require_once('model/DAL.php');
 require_once('controller/FileUploadController.php');
 require_once('controller/FileGetController.php');
 
-
 class MasterController {
 
     private $navigationView;
@@ -25,9 +24,8 @@ class MasterController {
     }
 
     public function handelInput(){
+
         if($this->navigationView->userWantsToViewFile()){
-
-
             $showFileView = new \view\ShowFileView($this->DAL);
             $fileGet = new \controller\FileGetController($showFileView);
 
@@ -35,11 +33,10 @@ class MasterController {
             $this->view = $fileGet->getHTML();
         } else {
 
-            $fileModel = new \model\FileModel();
-            $uploadView = new \view\UploadView();
-            $fileUpload = new \controller\FileUploadController($uploadView, $fileModel, $this->DAL);
-
-            $this->view = $uploadView->render($fileUpload->doUpload());
+            $uploadView = new \view\UploadView($this->DAL);
+            $fileUpload = new \controller\FileUploadController($uploadView, $this->DAL);
+            $fileUpload->doUpload();
+            $this->view = $fileUpload->getHTML();
         }
     }
 

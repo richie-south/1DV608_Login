@@ -17,3 +17,6 @@ $htmlView = new \view\LayoutView();
 
 // TODO: make title changeable
 $htmlView->renderHTMLPage("project", $view);
+
+// TODO: stop repost F5*∞
+// TODO: stop upload of none mp3 files

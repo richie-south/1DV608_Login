@@ -14,8 +14,7 @@ class ShowFileView {
 
     public function getFile($fileName){
         try {
-            $name = $this->DAL->getFileName($fileName);
-            return $name;
+            return $this->DAL->getFileName($fileName);
         } catch(\model\FileDontExsistException $e){
             $this->message = "File Dont exist";
         } catch (Exception $e) {
@@ -24,7 +23,7 @@ class ShowFileView {
         return null;
     }
 
-    public function generateFile($name){
+    public function generateFileControlls($name){
         return '
             <p>'.$this->message.'</p>
             <audio controls>

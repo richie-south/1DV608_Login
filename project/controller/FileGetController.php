@@ -15,10 +15,9 @@ class FileGetController {
     }
 
     public function getFile($fileName){
-
         $file = $this->showFileView->getFile($fileName);
         if($file != null){
-            $this->view = $this->showFileView->generateFile($file);
+            $this->view = $this->showFileView->generateFileControlls($file);
         }else{
             $this->view = $this->showFileView->undefinedName();
         }

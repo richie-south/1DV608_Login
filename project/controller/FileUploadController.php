@@ -5,38 +5,47 @@ namespace controller;
 class FileUploadController {
 
     private $uploadView;
-    private $fileModel;
+    //private $fileModel;
     private $DAL;
-    //private $uploadedFilePath;
+    private $view;
 
-    public function __construct(\view\UploadView $up, \model\FileModel $fileModel, \model\DAL $dal){
+    public function __construct(\view\UploadView $up, /* \model\FileModel $fileModel, */ \model\DAL $dal){
         $this->uploadView = $up;
-        $this->fileModel = $fileModel;
+        //$this->fileModel = $fileModel;
         $this->DAL = $dal;
     }
 
     public function doUpload(){
+        if($this->uploadView->isFileUploaded()){
+            $fileModel = $this->uploadView->getFile();
+            //var_dump($fileModel);
+            echo "hörde jag ";
+            if($fileModel != null){
+                echo "kanske ";
+                if($this->DAL->isTempUploaded($fileModel->getFile())){
+                    echo "bajs";
 
-        if($this->uploadView->isFileUploaded())
-        {
-            if($this->fileModel->isTempUploaded()){
-                do{
-                    $fileName = $this->fileModel->generateFileName();
-                }while($this->DAL->isSame($fileName));
+                    // TODO: move [do while] to model
+                    do{
+                        $fileName = $fileModel->generateFileName();
+                    }while($this->DAL->isSame($fileName));
+                    $path = $this->DAL->makeFilePath($fileName);
 
-                $file = $this->fileModel->getFileToUpload();
-                $path = $this->DAL->makeFilePath($fileName);
-
-                if($this->DAL->uploadFile($file, $path)){
-                    $this->uploadView->setUploadetFileURL($this->fileModel->trimFilePath($path));
-                    return true;
+                    if($this->DAL->uploadFile($fileModel->getFile(), $path)){
+                        $this->uploadView->setUploadetFileURL($this->DAL->trimFilePath($path));
+                        $this->view = $this->uploadView->linkRender();
+                    }
                 }
 
-            }else {
-                // TODO: This!
-                echo "error";
+            }else{
+                $this->view = $this->uploadView->errorPageRender();
             }
+        }else{
+            $this->view = $this->uploadView->fileUploadRender();
         }
-        return false;
+    }
+
+    public function getHTML(){
+        return $this->view;
     }
 }
