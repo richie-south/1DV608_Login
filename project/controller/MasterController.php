@@ -35,6 +35,7 @@ class MasterController {
 
             $uploadView = new \view\UploadView($this->DAL);
             $fileUpload = new \controller\FileUploadController($uploadView, $this->DAL);
+            
             $fileUpload->doUpload();
             $this->view = $fileUpload->getHTML();
         }

@@ -9,22 +9,16 @@ class FileUploadController {
     private $DAL;
     private $view;
 
-    public function __construct(\view\UploadView $up, /* \model\FileModel $fileModel, */ \model\DAL $dal){
+    public function __construct(\view\UploadView $up, \model\DAL $dal){
         $this->uploadView = $up;
-        //$this->fileModel = $fileModel;
         $this->DAL = $dal;
     }
 
     public function doUpload(){
         if($this->uploadView->isFileUploaded()){
             $fileModel = $this->uploadView->getFile();
-            //var_dump($fileModel);
-            echo "hörde jag ";
             if($fileModel != null){
-                echo "kanske ";
                 if($this->DAL->isTempUploaded($fileModel->getFile())){
-                    echo "bajs";
-
                     // TODO: move [do while] to model
                     do{
                         $fileName = $fileModel->generateFileName();

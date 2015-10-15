@@ -4,6 +4,7 @@ namespace model;
 
 class WrongFileTypeException extends \Exception {};
 class ToLargeFileException extends \Exception {};
+class NoFileException extends \Exception {};
 
 class FileModel {
 
@@ -12,15 +13,26 @@ class FileModel {
 
     public function __construct($file, \model\DAL $dal){
         $this->DAL = $dal;
+        $error = $file[$this->DAL->getFileType()]["error"];
+
+        if($error == 3 || $error == 4){
+            throw new NoFileException();
+        }
         if($this->getFileTyp($file[$this->DAL->getFileType()]["type"]) != $this->DAL->getFileType()){
             throw new WrongFileTypeException();
         }
-        if($this->compareSize($file[$this->DAL->getFileType()]["size"])){
+        if($this->compareSize($file[$this->DAL->getFileType()]["size"]) || $error == 1 || $error == 2){
             throw new ToLargeFileException();
         }
+
+
         $this->file = $file;
     }
 
+    /**
+     * @param  [string] $file [full file name]
+     * @return [string]       [exstensition of file name]
+     */
     private function getFileTyp($file){
         $type = explode("/",$file);
         return $type[1];
@@ -49,7 +61,7 @@ class FileModel {
         }
         return $result.=".".$this->DAL->getFileType();
     }
-//is_numeric
+
     public function generateFileName(){
         return $this->randomString(5);
     }

@@ -13,14 +13,6 @@ class UploadView {
         $this->DAL = $dal;
     }
 
-    public function render($isUpload){
-        if($isUpload){
-            return $this->linkRender();
-        }else{
-            return $this->fileUploadRender();
-        }
-    }
-
     public function fileUploadRender(){
         return '<form method="post" name="mp3upload" enctype="multipart/form-data">
             <label for="mp3">mp3 File:</label>
@@ -38,7 +30,10 @@ class UploadView {
     }
 
     public function errorPageRender(){
-        return '<p>'.$this->message.'</p>';
+        return '
+        <p>'.$this->message.'</p>
+        <a href="?">Back to start</a>
+        ';
     }
 
     public function isFileUploaded(){
@@ -57,6 +52,8 @@ class UploadView {
             $this->message = "Wrong file format";
         } catch (\model\ToLargeFileException $e) {
             $this->message = "To large file!";
+        } catch (\model\NoFileException $e){
+            $this->message = "No file uploaded!";
         }
 
         return null;
