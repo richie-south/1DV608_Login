@@ -10,21 +10,28 @@ class FileModel {
 
     private $DAL;
     private $file;
+    private static $type = "type";
+    private static $size = "size";
 
+    /**
+     * @param [$_FILES]   $file []
+     * @param [object]   $dal [an instanse of the dal class]
+     */
     public function __construct($file, \model\DAL $dal){
         $this->DAL = $dal;
         $error = $file[$this->DAL->getFileType()]["error"];
 
+        //  Error 3 = file was only partially uploaded | Errpr 4 = no file was uploaded
         if($error == 3 || $error == 4){
             throw new NoFileException();
         }
-        if($this->getFileTyp($file[$this->DAL->getFileType()]["type"]) != $this->DAL->getFileType()){
-            throw new WrongFileTypeException();
-        }
-        if($this->compareSize($file[$this->DAL->getFileType()]["size"]) || $error == 1 || $error == 2){
+        // Error 1 = file larger than server max upload | Error 2 = max sise och html form
+        if($error == 1 || $error == 2){
             throw new ToLargeFileException();
         }
-
+        if($this->getFileTyp($file[$this->DAL->getFileType()][self::$type]) != $this->DAL->getFileType()){
+            throw new WrongFileTypeException();
+        }
 
         $this->file = $file;
     }
@@ -35,11 +42,7 @@ class FileModel {
      */
     private function getFileTyp($file){
         $type = explode("/",$file);
-        return $type[1];
-    }
-
-    private function compareSize($size){
-        return $size < 0 || $size > 9000000;
+        return is_array($type) ? $type[1] : "";
     }
 
     /**
@@ -59,11 +62,13 @@ class FileModel {
             $val = round(rand(1, (strlen($chars) -1)));
             $result .= $chars[intval($val)];
         }
-        return $result.=".".$this->DAL->getFileType();
+        return $result;
     }
 
+
     public function generateFileName(){
-        return $this->randomString(5);
+        $randomString = $this->randomString(5);
+        return $randomString.=".".$this->DAL->getFileType();
     }
     public function getFile(){
         return $this->file;

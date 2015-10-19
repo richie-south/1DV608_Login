@@ -1,22 +1,22 @@
 <?php
 
 //INCLUDE THE FILES NEEDED...
+require_once('Settings.php');
+// view
 require_once('view/LayoutView.php');
-
+// controller
 require_once('controller/MasterController.php');
 
-error_reporting(E_ALL);
-ini_set('display_errors', 'On');
+if(\Settings::DisplayError){
+    error_reporting(E_ALL);
+    ini_set('display_errors', 'On');
+}
 
 $masterController = new \controller\MasterController();
-
-$masterController->handelInput();
+$masterController->run();
 $view = $masterController->generateOutput();
 
 $htmlView = new \view\LayoutView();
-
-// TODO: make title changeable
-$htmlView->renderHTMLPage("project", $view);
+$htmlView->renderHTMLPage($view);
 
 // TODO: stop repost F5*∞
-// TODO: stop upload of none mp3 files

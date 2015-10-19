@@ -2,13 +2,16 @@
 
 namespace controller;
 
+// view
 require_once('view/NavigationView.php');
 require_once('view/UploadView.php');
 require_once('view/ShowFileView.php');
 
+// model
 require_once('model/FileModel.php');
 require_once('model/DAL.php');
 
+// controller
 require_once('controller/FileUploadController.php');
 require_once('controller/FileGetController.php');
 
@@ -23,7 +26,7 @@ class MasterController {
         $this->DAL =  new \model\DAL();
     }
 
-    public function handelInput(){
+    public function run(){
 
         if($this->navigationView->userWantsToViewFile()){
             $showFileView = new \view\ShowFileView($this->DAL);
@@ -34,8 +37,8 @@ class MasterController {
         } else {
 
             $uploadView = new \view\UploadView($this->DAL);
-            $fileUpload = new \controller\FileUploadController($uploadView, $this->DAL);
-            
+            $fileUpload = new \controller\FileUploadController($uploadView, $this->DAL, $this->navigationView);
+
             $fileUpload->doUpload();
             $this->view = $fileUpload->getHTML();
         }

@@ -4,7 +4,6 @@ namespace view;
 
 class UploadView {
     private static $upload = "UploadView::submit";
-    private static $maxFileSize = 900000;
     private $uploadetFileURL = '';
     private $DAL;
     private $message = '';
@@ -14,9 +13,10 @@ class UploadView {
     }
 
     public function fileUploadRender(){
-        return '<form method="post" name="mp3upload" enctype="multipart/form-data">
+        return '
+        <form method="post" name="mp3upload" enctype="multipart/form-data">
             <label for="mp3">mp3 File:</label>
-            <input type="hidden" name="'.self::$maxFileSize.'" value="9000000000" />
+            <input type="hidden" name="MAX_FILE_SIZE" value="'.\Settings::MaxFileSize.'" />
             <input type="file" id="mp3" name="mp3" />
             <br/>
             <input type="submit" name="'.self::$upload.'" value="Upload" />
@@ -30,19 +30,15 @@ class UploadView {
     }
 
     public function errorPageRender(){
-        return '
-        <p>'.$this->message.'</p>
-        <a href="?">Back to start</a>
-        ';
+        return '<p>'.$this->message.'</p>'. $this->fileUploadRender();
     }
 
     public function isFileUploaded(){
         return isset($_POST[self::$upload]);
     }
 
-    public function setUploadetFileURL($fileName){
-        $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?f=$fileName";
-        $this->uploadetFileURL = $actual_link;
+    public function setUploadetFileURL($URL){
+        $this->uploadetFileURL = $URL;
     }
 
     public function getFile(){

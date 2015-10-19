@@ -8,13 +8,13 @@ class LayoutView {
 
     }
 
-    public function renderHTMLPage($title, $body){
+    public function renderHTMLPage($body){
         echo "<!DOCTYPE html>
           <html>
             <head>
               <meta charset='utf-8'>
                <link rel='stylesheet' type='text/css' href='view/css/style.css'>
-              <title>$title</title>
+              <title>Project</title>
             </head>
             <body>
                 <main>

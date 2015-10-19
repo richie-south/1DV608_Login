@@ -5,13 +5,13 @@ namespace controller;
 class FileUploadController {
 
     private $uploadView;
-    //private $fileModel;
     private $DAL;
     private $view;
 
-    public function __construct(\view\UploadView $up, \model\DAL $dal){
+    public function __construct(\view\UploadView $up, \model\DAL $dal, \view\NavigationView $nav){
         $this->uploadView = $up;
         $this->DAL = $dal;
+        $this->navigationView = $nav;
     }
 
     public function doUpload(){
@@ -26,7 +26,8 @@ class FileUploadController {
                     $path = $this->DAL->makeFilePath($fileName);
 
                     if($this->DAL->uploadFile($fileModel->getFile(), $path)){
-                        $this->uploadView->setUploadetFileURL($this->DAL->trimFilePath($path));
+                        $URL = $this->navigationView->makeFileNameUrl($this->DAL->trimFilePath($path));
+                        $this->uploadView->setUploadetFileURL($URL);
                         $this->view = $this->uploadView->linkRender();
                     }
                 }
