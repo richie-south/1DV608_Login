@@ -8,7 +8,7 @@ class UploadView {
     private $DAL;
     private $message = '';
 
-    public function __construct(\model\DAL $dal){
+    public function __construct(\model\fileDAL $dal){
         $this->DAL = $dal;
     }
 
@@ -50,6 +50,8 @@ class UploadView {
             $this->message = "To large file!";
         } catch (\model\NoFileException $e){
             $this->message = "No file uploaded!";
+        } catch (Exception $e) {
+            $this->message = "Unspecified error";
         }
 
         return null;

@@ -12,11 +12,15 @@ if(\Settings::DisplayError){
     ini_set('display_errors', 'On');
 }
 
-$masterController = new \controller\MasterController();
+$navigationView = new \view\NavigationView();
+$htmlView = new \view\LayoutView($navigationView);
+
+
+$masterController = new \controller\MasterController($navigationView);
 $masterController->run();
 $view = $masterController->generateOutput();
 
-$htmlView = new \view\LayoutView();
+
 $htmlView->renderHTMLPage($view);
 
 // TODO: stop repost F5*∞

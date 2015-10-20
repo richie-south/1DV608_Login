@@ -3,9 +3,8 @@
 namespace model;
 
 class FileDontExsistException extends \Exception {};
-//class WrongFileTypeException extends \Exception {};
 
-class DAL {
+class fileDAL {
 
     private static $target_dir = "files/";
     private static $removeFileTime = 86400; // 86400 = 60*60*25 = 24h
@@ -34,7 +33,7 @@ class DAL {
      */
     private function doesExsist($fileName){
         foreach(glob(self::$target_dir.'*.'.self::$fileType) as $file) {
-            if($fileName == rtrim(trim($file, self::$target_dir), ".".self::$fileType)){
+            if($fileName == $this->trimFilePath($file)){
                 return true;
             }
         }
@@ -46,27 +45,36 @@ class DAL {
         return $path[0];
     }
 
-    public function trimFilePath($path){
-        return rtrim(trim($path, self::$target_dir), ".".self::$fileType);
+    // TODO: trimFilePath and makeFilePath should maybe  not be in fileDAL
+    public function trimFilePath($file){
+        return basename($file, '.'.self::$fileType);
     }
-
     public function makeFilePath($fileName){
         return self::$target_dir . basename($fileName);
     }
 
-    public function isSame($fileName){
-        return $this->doesExsist($fileName);
+    public function isSame($file){
+        return $this->doesExsist($file);
     }
 
-    public function getFileName($fileName){
-        if($this->doesExsist($fileName)){
-            return $this->getFilePath($fileName);
+    public function getFileName($file){
+        if($this->doesExsist($file)){
+            return $this->getFilePath($file);
         }
         throw new FileDontExsistException();
     }
 
     public function getTargetDir(){
         return self::$target_dir;
+    }
+
+    public function getAllFiles(){
+        $array = [];
+        foreach (glob(self::$target_dir.'*.'.self::$fileType) as $file) {
+            $array[] = $this->trimFilePath($file);
+        }
+        return $array;
+        //return glob(self::$target_dir.'*.'.self::$fileType);
     }
 
     public function isTempUploaded($file){
@@ -80,6 +88,4 @@ class DAL {
     public function getFileType(){
         return self::$fileType;
     }
-
-
 }

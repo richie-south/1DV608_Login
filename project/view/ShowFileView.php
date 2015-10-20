@@ -7,7 +7,7 @@ class ShowFileView {
     private $DAL;
     private $message;
 
-    public function __construct(\model\DAL $dal){
+    public function __construct(\model\fileDAL $dal){
         $this->DAL = $dal;
         $this->message = "";
     }

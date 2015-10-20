@@ -17,7 +17,7 @@ class FileModel {
      * @param [$_FILES]   $file []
      * @param [object]   $dal [an instanse of the dal class]
      */
-    public function __construct($file, \model\DAL $dal){
+    public function __construct($file, \model\fileDAL $dal){
         $this->DAL = $dal;
         $error = $file[$this->DAL->getFileType()]["error"];
 
@@ -65,11 +65,11 @@ class FileModel {
         return $result;
     }
 
-
     public function generateFileName(){
         $randomString = $this->randomString(5);
         return $randomString.=".".$this->DAL->getFileType();
     }
+    
     public function getFile(){
         return $this->file;
     }

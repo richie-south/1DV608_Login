@@ -7,8 +7,9 @@ class FileUploadController {
     private $uploadView;
     private $DAL;
     private $view;
+    private $navigationView;
 
-    public function __construct(\view\UploadView $up, \model\DAL $dal, \view\NavigationView $nav){
+    public function __construct(\view\UploadView $up, \model\fileDAL $dal, \view\NavigationView $nav){
         $this->uploadView = $up;
         $this->DAL = $dal;
         $this->navigationView = $nav;
