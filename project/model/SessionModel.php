@@ -4,22 +4,22 @@ namespace model;
 
 class SessionModel {
 
-    private static $uploadSession = "status";
+    private static $loginSession = "status";
 
     public function __construct(){
         session_start();
     }
 
-    public function setUploadSession($val){
-        $_SESSION[self::$val] = $val;
+    public function setLogedInSession($val){
+        $_SESSION[self::$loginSession] = $val;
     }
 
-    public function destroyUploadSession(){
-        unset($_SESSION[self::$uploadSession]);
+    public function destroyLogedInSession(){
+        unset($_SESSION[self::$loginSession]);
     }
 
-    public function isUploadSessionSet(){
-        return isset($_SESSION[self::$uploadSession]);
+    public function isLogedInSessionSet(){
+        return isset($_SESSION[self::$loginSession]) && $_SESSION[self::$loginSession] == true;
     }
 
 }

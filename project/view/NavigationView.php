@@ -6,9 +6,9 @@ class NavigationView {
 
     private static $viewFile = "f";
     private static $login = "login";
+    private static $logout = "logout";
 
     public function __construct(){
-
     }
 
     public function userWantsToViewFile(){
@@ -20,14 +20,27 @@ class NavigationView {
     }
 
     public function makeFileNameUrl($fileName){
-        return "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?".self::$viewFile."=$fileName";
+        return "http://$_SERVER[HTTP_HOST]?".self::$viewFile."=$fileName";
     }
 
     public function userWantsToLogin(){
         return isset($_GET[self::$login]);
     }
 
+    public function userWantsToLogout(){
+        return isset($_GET[self::$logout]);
+    }
+
     public function getLoginURL(){
         return self::$login;
+    }
+
+    public function getLogoutURL(){
+        return self::$logout;
+    }
+
+    public function redirectToStart(){
+        header("Location: http://$_SERVER[HTTP_HOST]");
+        die();
     }
 }

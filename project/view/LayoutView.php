@@ -4,10 +4,10 @@ namespace view;
 
 class LayoutView {
 
-    private $navigationView;
+    //private $navigationView;
 
     public function __construct(\view\NavigationView $nav){
-        $this->navigationView = $nav;
+        //$this->navigationView = $nav;
     }
 
     public function renderHTMLPage($body){
@@ -19,7 +19,7 @@ class LayoutView {
               <title>Project</title>
             </head>
             <body>
-                <a href="?'.$this->navigationView->getLoginURL().'">Login</a>
+
                 <main>
                     <div class="wrap">
                         '.$body.'
@@ -28,5 +28,7 @@ class LayoutView {
              </body>
           </html>
         ';
+
+        //<a href="?'.$this->navigationView->getLoginURL().'">Login</a>
     }
 }

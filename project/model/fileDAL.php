@@ -21,28 +21,40 @@ class fileDAL {
     private function fileRemoval(){
         foreach(glob(self::$target_dir.'*.'.self::$fileType) as $file) {
             if (filemtime($file) < (time()-self::$removeFileTime)) {
-                unlink($file);
+                $this->removeFile($file);
             }
         }
     }
-
     /**
      * [checks is file exsists in directory]
      * @param  [string] $fileName [name of a file]
      * @return [bool]   [true if file exsists]
      */
-    private function doesExsist($fileName){
+    private function doesExsist($filename){
         foreach(glob(self::$target_dir.'*.'.self::$fileType) as $file) {
-            if($fileName == $this->trimFilePath($file)){
+            if($filename == $this->trimFilePath($file)){
                 return true;
             }
         }
         return false;
     }
 
-    private function getFilePath($fileName){
-        $path = glob(self::$target_dir.=$fileName.".".self::$fileType);
+    /**
+     * [get file path from file]
+     * @param  [string] $filename [name of a file]
+     * @return [string]           [path to a file]
+     */
+    public function getFilePath($filename){
+        $path = glob(self::$target_dir.$filename.".".self::$fileType);
         return $path[0];
+    }
+
+    /**
+     * [removes file ]
+     * @param  [string] $pathToFile [path+filename]
+     */
+    public function removeFile($pathToFile){
+        unlink($pathToFile);
     }
 
     // TODO: trimFilePath and makeFilePath should maybe  not be in fileDAL
@@ -68,23 +80,33 @@ class fileDAL {
         return self::$target_dir;
     }
 
+    /**
+     * @return [array] [all filenames in target_dir]
+     */
     public function getAllFiles(){
         $array = [];
         foreach (glob(self::$target_dir.'*.'.self::$fileType) as $file) {
             $array[] = $this->trimFilePath($file);
         }
         return $array;
-        //return glob(self::$target_dir.'*.'.self::$fileType);
     }
 
     public function isTempUploaded($file){
         return is_uploaded_file($file[self::$fileType][self::$tmpName]);
     }
 
+    /**
+     * @param  [file] $file [file to move]
+     * @param  [string] $path [place to move file]
+     * @return [bool]       [true if sucsessful]
+     */
     public function uploadFile($file, $path){
         return move_uploaded_file($file[self::$fileType][self::$tmpName], $path);
     }
 
+    /**
+     * @return [string] [file ending]
+     */
     public function getFileType(){
         return self::$fileType;
     }
