@@ -8,13 +8,13 @@ require_once('view/UploadView.php');
 require_once('view/ShowFileView.php');
 require_once('view/LoginView.php');
 require_once('view/LogedInView.php');
+require_once('view/SessionView.php');
 
 // model
 require_once('model/FileModel.php');
 require_once('model/UserModel.php');
 require_once('model/UserDAL.php');
 require_once('model/fileDAL.php');
-require_once('model/SessionModel.php');
 
 // controller
 require_once('controller/FileUploadController.php');
@@ -22,6 +22,7 @@ require_once('controller/FileGetController.php');
 require_once('controller/LoginController.php');
 require_once('controller/LogoutController.php');
 require_once('controller/DeleteFileController.php');
+require_once('controller/NavigationController.php');
 
 class MasterController {
 
@@ -29,17 +30,20 @@ class MasterController {
     private $view;
     private $fileDAL;
     private $userDAL;
-    private $sessionModel;
+    private $sessionView;
     private $isLoggedin;
+    private $navigationController;
 
-    public function __construct(\view\NavigationView $nav){
-        $this->navigationView = $nav;
+    public function __construct(){
+        $this->navigationView = new \view\NavigationView();
         $this->fileDAL =  new \model\fileDAL();
         $this->userDAL = new \model\UserDAL();
-        $this->sessionModel = new \model\SessionModel();
+        $this->sessionView = new \view\SessionView();
+        $this->navigationController = new \controller\NavigationController($this->navigationView, $this->sessionView);
     }
 
     public function run(){
+        $this->navigationController->doNavigationControlls();
 
         if($this->navigationView->userWantsToViewFile()){
             $showFileView = new \view\ShowFileView($this->fileDAL);
@@ -55,17 +59,13 @@ class MasterController {
             $deletefileController = new \controller\DeleteFileController($logedInView, $this->fileDAL);
             $deletefileController->doDeleteFile();
 
-            $loginController = new \controller\LoginController($loginView, $logedInView, $this->navigationView, $this->fileDAL, $this->userDAL, $this->sessionModel);
-
+            $loginController = new \controller\LoginController($loginView, $logedInView, $this->fileDAL, $this->sessionView);
             $loginController->doLogin();
-            $this->view = $loginController->getHTML();
 
-            // TODO: if admin wants to remove file.
-
-
-        } else if ($this->navigationView->userWantsToLogout()){
-            $logoutController = new \controller\LogoutController($this->navigationView, $this->sessionModel);
+            $logoutController = new \controller\LogoutController($logedInView, $this->navigationView, $this->sessionView);
             $logoutController->doLogout();
+
+            $this->view = $loginController->getHTML();
         }else {
             $uploadView = new \view\UploadView($this->fileDAL);
             $fileUpload = new \controller\FileUploadController($uploadView, $this->fileDAL, $this->navigationView);
@@ -77,6 +77,10 @@ class MasterController {
 
     public function generateOutput(){
         return $this->view;
+    }
+
+    public function generateNavigation(){
+        return $this->navigationController->getNavigationHTML();
     }
 
 }

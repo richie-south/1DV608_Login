@@ -4,21 +4,20 @@ namespace controller;
 
 class LogoutController {
 
+    private $logedinView;
     private $navigationView;
-    private $sessionModel;
+    private $sessionView;
 
-    public function __construct(\view\NavigationView $nav, \model\SessionModel $sm){
+    public function __construct(\view\LogedInView $lov, \view\NavigationView $nav, \view\SessionView $sv){
+        $this->logedinView = $lov;
         $this->navigationView = $nav;
-        $this->sessionModel = $sm;
+        $this->sessionView = $sv;
     }
 
     public function doLogout(){
-        $this->sessionModel->destroyLogedInSession();
-        $this->navigationView->redirectToStart();
-
-    }
-
-    public function getHTML(){
-        return $this->view;
+        if($this->logedinView->checkLogoutPost()){
+            $this->sessionView->destroyLogedInSession();
+            $this->navigationView->redirectToStart();
+        }
     }
 }

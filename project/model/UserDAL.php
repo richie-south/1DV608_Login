@@ -14,6 +14,12 @@ class UserDAL {
 		}
     }
 
+    /**
+     * [checks if user exsists in database]
+     * @param [string] [name of a user]
+     * @param [string] [password to user]
+     * @return[bool]   [true if username and password match]
+     */
     public function checkUserCredentials($username, $password){
         $stmt = $this->database->prepare("SELECT EXISTS(SELECT 1 FROM ".self::$userTable." WHERE BINARY username = '".$username."' AND password = '".$password."')");
         if ($stmt === FALSE) {
@@ -29,6 +35,7 @@ class UserDAL {
     }
 
     // added the admin user
+    /*
     private function addAdmin($username, $password){
         $p = sha1(\Settings::SALT . $password);
 
@@ -39,6 +46,6 @@ class UserDAL {
 
 		$stmt->bind_param('ss', $username, $p);
 		$stmt->execute();
-    }
+    }*/
 
 }

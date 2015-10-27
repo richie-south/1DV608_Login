@@ -65,11 +65,15 @@ class FileModel {
         return $result;
     }
 
+    /**
+     * [creats a new file name]
+     * @return [string] [filename]
+     */
     public function generateFileName(){
         $randomString = $this->randomString(5);
         return $randomString.=".".$this->DAL->getFileType();
     }
-    
+
     public function getFile(){
         return $this->file;
     }

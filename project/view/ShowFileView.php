@@ -12,6 +12,9 @@ class ShowFileView {
         $this->message = "";
     }
 
+    /**
+     * @return [string] [file if no error ecours]
+     */
     public function getFile($fileName){
         try {
             return $this->DAL->getFileName($fileName);
@@ -23,13 +26,27 @@ class ShowFileView {
         return null;
     }
 
-    public function generateFileControlls($name){
+    public function generateAudioControlls($name){
         return '
-            <p>'.$this->message.'</p>
-            <audio controls>
-                <source src="'.$name.'" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>';
+            <section>
+               <div class="dialog whide">
+
+                   <div class="content">
+                       <div class="title">Enjoy</div><br>
+                       <p>'.$this->message.'</p>
+                       <audio controls>
+                           <source src="'.$name.'" type="audio/mpeg">
+                           Your browser does not support the audio element.
+                       </audio>
+                   </div>
+
+                   <div class="button label-blue">
+                       <div class="center" fit><a href="?">Back</a></div>
+                   </div>
+
+               </div>
+            </section>
+            ';
     }
 
     public function undefinedName(){

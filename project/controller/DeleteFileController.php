@@ -12,21 +12,12 @@ class DeleteFileController {
     }
 
     public function doDeleteFile(){
-        $path = "";
         if($this->logedInView->checkDeletePost()){
 
             $checkt = $this->logedInView->getChecktCheckboxes();
             if($checkt != null){
-                foreach ($checkt as $filename) {
-                    $path = $this->fileDAL->getFilePath($filename);
-                    $this->fileDAL->removeFile($path);
-                }
-
+                $this->fileDAL->removeFilesFromName($checkt);
             }
         }
-    }
-
-    public function getHTML(){
-        return $this->view;
     }
 }

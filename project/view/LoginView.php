@@ -2,6 +2,7 @@
 
 namespace view;
 
+
 class LoginView {
     private static $login = 'LoginView::Login';
 	private static $logout = 'LoginView::Logout';
@@ -17,17 +18,25 @@ class LoginView {
 
     public function generateLoginFormHTML() {
 		return '
-			<form method="post" >
-				<fieldset>
-					<legend>Login</legend>
-					<p id="' . self::$messageId . '">' . $this->message . '</p>
-					<label for="' . self::$name . '">Username :</label>
-					<input type="text" id="' . self::$name . '" name="' . self::$name . '" value= "'.$this->getRequestUserName().'" />
-					<label for="' . self::$password . '">Password :</label>
-					<input type="password" id="' . self::$password . '" name="' . self::$password . '" />
-					<input type="submit" name="' . self::$login . '" value="login" />
-				</fieldset>
-			</form>
+            <form method="post" class="login">
+                <section>
+                    <div class="dialog">
+                        <div class="content">
+                            <div class="title">Login</div><br>
+                            <div id="' . self::$messageId . '">' . $this->message . '</div>
+                            <label for="' . self::$name . '">Username :</label>
+                            <input type="text" id="' . self::$name . '" name="' . self::$name . '" value= "'.$this->getRequestUserName().'" />
+                            <label for="' . self::$password . '">Password :</label>
+                            <input type="password" id="' . self::$password . '" name="' . self::$password . '" />
+                        </div>
+
+                        <div class="button label-blue">
+                            <div class="center" fit></div>
+                            <input type="submit" name="' . self::$login . '" value="login" />
+                        </div>
+                    </div>
+                </section>
+            </form>
 		';
 	}
 
@@ -63,8 +72,9 @@ class LoginView {
  		return isset($_POST[self::$logout]);
  	}
 
+
     public function getUser(){
-        try {
+    try {
             return new \model\UserModel($this->userDAL, $this->getInputUsername(), $this->getInputPassword());
         } catch (\model\EmptyInputException $e) {
             $this->message = "Empty input";

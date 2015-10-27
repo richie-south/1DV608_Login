@@ -19,8 +19,7 @@ class FileUploadController {
         if($this->uploadView->isFileUploaded()){
             $fileModel = $this->uploadView->getFile();
             if($fileModel != null){
-                if($this->DAL->isTempUploaded($fileModel->getFile())){
-                    // TODO: move [do while] to model
+                if($this->uploadView->isTempUploaded()){
                     do{
                         $fileName = $fileModel->generateFileName();
                     }while($this->DAL->isSame($fileName));

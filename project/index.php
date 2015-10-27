@@ -1,5 +1,7 @@
 <?php
 
+// TODO: require right stuff in here!
+
 //INCLUDE THE FILES NEEDED...
 require_once('Settings.php');
 // view
@@ -12,15 +14,11 @@ if(\Settings::DisplayError){
     ini_set('display_errors', 'On');
 }
 
-$navigationView = new \view\NavigationView();
-$htmlView = new \view\LayoutView($navigationView);
+$htmlView = new \view\LayoutView();
+$masterController = new \controller\MasterController();
 
-
-$masterController = new \controller\MasterController($navigationView);
 $masterController->run();
 $view = $masterController->generateOutput();
+$nav = $masterController->generateNavigation();
 
-
-$htmlView->renderHTMLPage($view);
-
-// TODO: stop repost F5*∞
+$htmlView->renderHTMLPage($view, $nav);

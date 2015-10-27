@@ -12,13 +12,13 @@ class fileDAL {
     private static $tmpName = "tmp_name";
 
     public function __construct(){
-        $this->fileRemoval();
+        $this->removeOldFiles();
     }
 
     /**
-     * [Removes files older than specific time]
+     * [Removes files older than specified time]
      */
-    private function fileRemoval(){
+    private function removeOldFiles(){
         foreach(glob(self::$target_dir.'*.'.self::$fileType) as $file) {
             if (filemtime($file) < (time()-self::$removeFileTime)) {
                 $this->removeFile($file);
@@ -57,18 +57,49 @@ class fileDAL {
         unlink($pathToFile);
     }
 
-    // TODO: trimFilePath and makeFilePath should maybe  not be in fileDAL
+    /**
+     * [remove file fomr file name]
+     */
+    private function removeFileFromName($filename){
+        $path = $this->getFilePath($filename);
+        $this->removeFile($path);
+    }
+
+    /**
+     * [removes files from file names]
+     */
+    public function removeFilesFromName($filenames){
+        foreach ($filenames as $filename) {
+            $this->removeFileFromName($filename);
+        }
+    }
+
+    /**
+     * removes file ending form file
+     */
     public function trimFilePath($file){
         return basename($file, '.'.self::$fileType);
     }
+
+    /**
+     * [add target_dir to file making full path to file]
+     */
     public function makeFilePath($fileName){
         return self::$target_dir . basename($fileName);
     }
 
-    public function isSame($file){
-        return $this->doesExsist($file);
+    /**
+     * [checks if file exsists]
+     * @param [string] [name of a file]
+     * @return [bool] [true if file exsists]
+     */
+    public function isSame($filename){
+        return $this->doesExsist($filename);
     }
 
+    /**
+     * @return [string] [path to file if it exsists]
+     */
     public function getFileName($file){
         if($this->doesExsist($file)){
             return $this->getFilePath($file);
@@ -76,6 +107,9 @@ class fileDAL {
         throw new FileDontExsistException();
     }
 
+    /**
+     * @return [string] [folder location to save files to]
+     */
     public function getTargetDir(){
         return self::$target_dir;
     }
@@ -89,10 +123,6 @@ class fileDAL {
             $array[] = $this->trimFilePath($file);
         }
         return $array;
-    }
-
-    public function isTempUploaded($file){
-        return is_uploaded_file($file[self::$fileType][self::$tmpName]);
     }
 
     /**
@@ -109,5 +139,12 @@ class fileDAL {
      */
     public function getFileType(){
         return self::$fileType;
+    }
+
+    /**
+     * @return [string] [tmpName]
+     */
+    public function getTmpName(){
+        return self::$tmpName;
     }
 }

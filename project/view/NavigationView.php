@@ -6,7 +6,6 @@ class NavigationView {
 
     private static $viewFile = "f";
     private static $login = "login";
-    private static $logout = "logout";
 
     public function __construct(){
     }
@@ -27,20 +26,26 @@ class NavigationView {
         return isset($_GET[self::$login]);
     }
 
-    public function userWantsToLogout(){
-        return isset($_GET[self::$logout]);
-    }
-
     public function getLoginURL(){
         return self::$login;
-    }
-
-    public function getLogoutURL(){
-        return self::$logout;
     }
 
     public function redirectToStart(){
         header("Location: http://$_SERVER[HTTP_HOST]");
         die();
+    }
+
+
+
+    public function backToStartNav(){
+        return '<a href="?">Start</a>';
+    }
+
+    public function adminPage(){
+        return '<a href="?'.self::$login.'">Admin page</a>';
+    }
+
+    public function loginPage(){
+        return '<a href="?'.self::$login.'">Login</a>';
     }
 }
