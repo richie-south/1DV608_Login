@@ -19,7 +19,7 @@ class NavigationView {
     }
 
     public function makeFileNameUrl($fileName){
-        return "http://$_SERVER[HTTP_HOST]?".self::$viewFile."=$fileName";
+        return "http://$_SERVER[HTTP_HOST]/phpproject?".self::$viewFile."=$fileName";
     }
 
     public function userWantsToLogin(){
@@ -31,7 +31,7 @@ class NavigationView {
     }
 
     public function redirectToStart(){
-        header("Location: http://$_SERVER[HTTP_HOST]");
+        header("Location: http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?");
         die();
     }
 
@@ -42,10 +42,10 @@ class NavigationView {
     }
 
     public function adminPage(){
-        return '<a href="?'.self::$login.'">Admin page</a>';
+        return '<a href="?'.self::$login.'">Admin dashboard</a>';
     }
 
     public function loginPage(){
-        return '<a href="?'.self::$login.'">Login</a>';
+        return '<a href="?'.self::$login.'">Admin login</a>';
     }
 }
