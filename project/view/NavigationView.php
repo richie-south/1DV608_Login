@@ -31,7 +31,7 @@ class NavigationView {
     }
 
     public function redirectToStart(){
-        header("Location: http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]?");
+        header("Location: http://$_SERVER[HTTP_HOST]/phpproject/");
         die();
     }
 

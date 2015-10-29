@@ -6,6 +6,12 @@ Ide: användare ska enkelt kunna ladda up en musik fil och dela den med vem som 
 Har du någonsin kännt att du velat dela med dig av en mp3 men inte har verktyget för att göra det?
 Då har jag produkten för dig! med denna product kan du enkelt ladda up en mp3 fil och dela den med vem du vill.
 
+Login uppgifter:
+användarnamn: Admin
+lösenord: Password
+
+Max fil storlek borde var 2m
+
 ### Use case:
 
 pre-vilkor:
